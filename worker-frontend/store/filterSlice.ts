@@ -3,10 +3,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface FilterState {
   driverLicenses: string[];
-  placeOfWork: string;
+  placeOfWork: string[];
   drivingExperience: string[];
-  yearsOfExperience: { start: number; end: number };
-  expectedSalary: { start: number; end: number };
+  yearsOfExperience: { start: number | null; end: number | null };
+  expectedSalary: { start: number | null; end: number | null };
 }
 
 const initialState: FilterState = {
@@ -30,7 +30,12 @@ const filterSlice = createSlice({
       }
     },
     setPlaceOfWork(state, action: PayloadAction<string>) {
-      state.placeOfWork = action.payload;
+      const index = state.placeOfWork.indexOf(action.payload);
+      if (index > -1) {
+        state.placeOfWork.splice(index, 1); // Remove if already selected
+      } else {
+        state.placeOfWork.push(action.payload); // Add if not selected
+      }
     },
     setDrivingExperience(state, action: PayloadAction<string>) {
       const index = state.drivingExperience.indexOf(action.payload);

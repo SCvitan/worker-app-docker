@@ -271,7 +271,7 @@ export default function Component() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <FormField
+                        {/* <FormField
                           control={form.control}
                           name="personalInfo.profilePicture"
                           render={({ field }) => (
@@ -283,7 +283,7 @@ export default function Component() {
                               <FormMessage />
                             </FormItem>
                           )}
-                        />
+                        /> */}
                         <FormField
                           control={form.control}
                           name="personalInfo.firstName"
