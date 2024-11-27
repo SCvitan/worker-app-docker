@@ -26,6 +26,22 @@ services:
       - "8080:8080"  # Expose Spring Boot app on port 8080
     depends_on:
       - postgres  # Ensure PostgreSQL is up before starting Spring Boot
-
+  
+      
+  # Next.js Application
+  nextjs:
+    build:
+      context: /home/scvitan/Desktop/worker-app-docker/worker-frontend  # Path to your Next.js app directory
+      dockerfile: /home/scvitan/Desktop/worker-app-docker/worker-frontend/Dockerfile  # Specify the Next.js app's Dockerfile if needed
+    container_name: nextjs-container
+    environment:
+      - NODE_ENV=production  # Run Next.js in production mode
+      - NEXT_PUBLIC_API_URL=http://localhost:8080  # Set your API URL (point to your Spring Boot backend)
+    ports:
+      - "3000:3000"  # Expose Next.js app on port 3000
+    depends_on:
+      - springboot  # Ensure Spring Boot app is ready before starting Next.js
+      
+      
 volumes:
   postgres-data:  # Named volume for PostgreSQL data persistence
