@@ -137,6 +137,11 @@ public class UserProfileService {
         return userProfile;
     }
 
+    public Optional<UserProfile> getUserProfileById(Long userId) throws Exception {
+
+        return userProfileRepo.findById(userId);
+    }
+
     private UserProfile updatePersonalInfo(ApiRequestDTO.PersonalInfo personalInfoDTO, UserProfile userProfile) {
         // Update the personal info in UserProfile entity
         userProfile.setFirstName(personalInfoDTO.getFirstName());

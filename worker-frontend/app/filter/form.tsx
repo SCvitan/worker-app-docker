@@ -12,24 +12,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { RefreshCw } from 'lucide-react'
-
-// Define types
-type User = {
-  userId: number;
-  firstName: string;
-  lastName: string;
-  age: number;
-  profession: string;
-}
-
-type Filters = {
-  profession: string;
-  experience: string;
-  driversLicences: string[];
-  jobInterest: string[];
-  countriesInterestedWorkingIn: string[];
-  categoriesExperiencedWith: string[];
-}
+import { UserProfileModal } from '@/components/UserProfileModal'
+import { User, Filters } from '@/app/types/types'
 
 // Filter options
 const roleOptions = ['driver', 'Cleaning', 'Construction']
@@ -49,6 +33,8 @@ export default function FilterTest() {
     categoriesExperiencedWith: [],
   })
   const [filteredUsers, setFilteredUsers] = useState<User[]>([])
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleFilterChange = (filterType: keyof Filters, value: string) => {
     setFilters(prev => ({
@@ -75,18 +61,8 @@ export default function FilterTest() {
         throw new Error('Failed to fetch filtered users')
       }
 
-      const data = await response.json()
-      
-      // Map the response data to the User type
-      const mappedUsers: User[] = data.map((user: any) => ({
-        userId: user.userId,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        age: user.age,
-        profession: user.profession
-      }))
-
-      setFilteredUsers(mappedUsers)
+      const data: User[] = await response.json()
+      setFilteredUsers(data)
     } catch (error) {
       console.error('Error applying filters:', error)
       // Handle error (e.g., show error message to user)
@@ -103,6 +79,21 @@ export default function FilterTest() {
       categoriesExperiencedWith: [],
     })
     setFilteredUsers([])
+  }
+
+  const handleUserClick = async (userId: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/filter/user/${userId}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch user details')
+      }
+      const userDetails: User = await response.json()
+      setSelectedUser(userDetails)
+      setIsModalOpen(true)
+    } catch (error) {
+      console.error('Error fetching user details:', error)
+      // Handle error (e.g., show error message to user)
+    }
   }
 
   return (
@@ -206,13 +197,13 @@ export default function FilterTest() {
           <h2 className="text-xl font-semibold mb-4">Filtered Users</h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredUsers.map((user) => (
-              <Card key={user.userId}>
+              <Card key={user.userId} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleUserClick(user.userId)}>
                 <CardHeader>
                   <div className="flex items-center space-x-4">
-                    {<Avatar>
+                    <Avatar>
                       <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${user.firstName} ${user.lastName}`} />
                       <AvatarFallback>{user.firstName[0]}{user.lastName[0]}</AvatarFallback>
-                    </Avatar>}
+                    </Avatar>
                     <div>
                       <CardTitle className="text-lg">{user.firstName} {user.lastName}</CardTitle>
                       <p className="text-sm text-muted-foreground">{user.profession}</p>
@@ -220,13 +211,20 @@ export default function FilterTest() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p><strong>Age:</strong> {user.age}</p>
+                  <p><strong>Email:</strong> {user.email}</p>
+                  <p><strong>Phone:</strong> {user.phone}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
         </div>
       </div>
+      <UserProfileModal
+        user={selectedUser}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   )
 }
+

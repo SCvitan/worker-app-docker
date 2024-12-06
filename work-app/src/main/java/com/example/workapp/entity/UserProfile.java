@@ -43,7 +43,15 @@ public class UserProfile {
     private String profession;
 
     @OneToOne(mappedBy = "userProfile")
-    @JsonBackReference// This maps to the 'userProfile' field in DriverInfo
+    // This maps to the 'userProfile' field in DriverInfo
     private DriverInfo driverInfo;
 
+    @OneToMany(mappedBy = "userProfile", fetch = FetchType.EAGER)
+    private List<Education> education;
+
+    @OneToMany(mappedBy = "userProfile", fetch = FetchType.EAGER)
+    private List<Language> languages;
+
+    @OneToMany(mappedBy = "userProfile", fetch = FetchType.EAGER)
+    private List<WorkExperience> workExperiences;
 }

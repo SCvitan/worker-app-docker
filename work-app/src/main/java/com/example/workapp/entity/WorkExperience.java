@@ -1,6 +1,7 @@
 package com.example.workapp.entity;
 
 import com.example.workapp.dto.ApiRequestDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,5 +26,6 @@ public class WorkExperience {
 
     @ManyToOne
     @JoinColumn(name = "personal_info_id")
+    @JsonBackReference
     private UserProfile userProfile;
 }

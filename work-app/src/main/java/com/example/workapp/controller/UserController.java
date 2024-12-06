@@ -1,6 +1,7 @@
 package com.example.workapp.controller;
 
 import com.example.workapp.dto.*;
+import com.example.workapp.entity.UserProfile;
 import com.example.workapp.enums.DurationOfRelocation;
 import com.example.workapp.service.UserProfileService;
 import com.example.workapp.service.UserService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -38,10 +40,5 @@ public class UserController {
         userProfileService.patchCV(jwt, objectMap);
         return ResponseEntity.ok("CV patched");
     }
-
-
-
-
-
 
 }

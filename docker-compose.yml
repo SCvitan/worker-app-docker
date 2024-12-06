@@ -22,6 +22,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/worker-app  # Connect to PostgreSQL service
       SPRING_DATASOURCE_USERNAME: user  # Database user
       SPRING_DATASOURCE_PASSWORD: mypassword  # Database password
+    volumes:  
+      - /home/scvitan/Desktop/worker-app-docker/work-app  # Mount the Spring Boot code into the containe
     ports:
       - "8080:8080"  # Expose Spring Boot app on port 8080
     depends_on:
